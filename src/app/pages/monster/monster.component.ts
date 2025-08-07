@@ -6,23 +6,29 @@ import { MonsterType } from '../../utils/monster.utils';
 import { Monster } from '../../models/monster.model';
 import { PlayingCardComponent } from '../../components/playing-card/playing-card.component';
 import { MonsterService } from '../../services/monster/monster.service';
+import { MatButtonModule } from '@angular/material/button'
+import { MatInputModule } from '@angular/material/input'
+import { MatSelectModule } from '@angular/material/select';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteMonsterConfirmationDialogComponent } from '../../components/delete-monster-confirmation-dialog/delete-monster-confirmation-dialog.component';
 
 @Component({
   selector: 'app-monster',
   standalone: true,
-  imports: [ReactiveFormsModule, PlayingCardComponent],
+  imports: [ReactiveFormsModule, PlayingCardComponent, MatButtonModule, MatInputModule, MatSelectModule],
   templateUrl: './monster.component.html',
   styleUrl: './monster.component.css'
 })
 export class MonsterComponent implements OnInit, OnDestroy {
 
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
  	private fb = inject(FormBuilder);
   private monsterService = inject(MonsterService);
- 	private router = inject(Router);
+  private routeSubscription: Subscription | null = null;
+  private formValuesSubscription: Subscription | null = null;
+  private readonly dialog = inject(MatDialog);
 
- 	private routeSubscription: Subscription | null = null;
- 	private formValuesSubscription: Subscription | null = null;
 
   formGroup = this.fb.group({
  		name: ['', [Validators.required]],
@@ -68,6 +74,7 @@ export class MonsterComponent implements OnInit, OnDestroy {
       this.monster.id = this.monsterId;
       this.monsterService.update(this.monster);
     }
+    this.router.navigate(['/home']);
  	}
 
   onFileChange(event: any) {
@@ -90,5 +97,15 @@ export class MonsterComponent implements OnInit, OnDestroy {
   navigateBack() {
  		this.router.navigate(['/home']);
  	}
+
+  deleteMonster() {
+		const dialogRef = this.dialog.open(DeleteMonsterConfirmationDialogComponent);
+		dialogRef.afterClosed().subscribe(confirmation => {
+			if (confirmation) {
+				this.monsterService.delete(this.monsterId);
+				this.navigateBack();
+			}
+		})
+	}
 
 }
