@@ -2,7 +2,7 @@
 
 <div id="card-list">
     @for(monster of filteredMonsters(); track monster) {
-        <app-playing-card [monster]="monster" />
+        <app-playing-card [monster]="monster" (click)="openMonster(monster)" />
     }
 </div>
 
@@ -13,5 +13,5 @@
 }
 
 <div class="center">
-    <button (click)="addMonster()">Add generic monster</button>
+    <button (click)="addMonster()">Add monster</button>
 </div>
