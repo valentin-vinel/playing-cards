@@ -1,12 +1,10 @@
-#card-list {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
+mat-toolbar {
+ 	display: flex;
+ 	align-items: center;
+ 	padding: 0 20px;
+ }
 
-.center {
-    margin-top: 40px;
-    text-align: center;
-}
+ mat-toolbar p {
+ 	flex-grow: 1;
+ 	margin: 0;
+ }
