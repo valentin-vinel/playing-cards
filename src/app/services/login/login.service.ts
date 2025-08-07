@@ -15,7 +15,7 @@ export interface Credentials {
 export class LoginService {
 
   private http = inject(HttpClient);
-  private BASE_URL = 'http://localhost:8000'
+  private BASE_URL = 'http://localhost:3000'
 
   user = signal<User | null | undefined>(undefined);
 
@@ -37,7 +37,7 @@ export class LoginService {
   }
 
  	getUser(): Observable<User | null | undefined> {
- 		return this.http.get('http://localhost:8000/sessions/me/').pipe(
+ 		return this.http.get('http://localhost:3000/sessions/me/').pipe(
  			tap((result: any) => {
  				const user = Object.assign(new User(), result);
  				this.user.set(user);
@@ -49,7 +49,7 @@ export class LoginService {
  	}
 
  	logout() {
- 		return this.http.get('http://localhost:8000/sessions/logout/').pipe(
+ 		return this.http.get('http://localhost:3000/sessions/logout/').pipe(
  			tap((result: any) => {
  				localStorage.removeItem('token');
  				this.user.set(null);

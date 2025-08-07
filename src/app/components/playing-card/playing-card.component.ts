@@ -16,6 +16,7 @@ export class PlayingCardComponent {
     return MonsterTypeProperties[this.monster().type].imageUrl;
   })
   backgroundColor = computed(() => {
+    console.log('Monster:', this.monster());
     return MonsterTypeProperties[this.monster().type].color;
   })
 };

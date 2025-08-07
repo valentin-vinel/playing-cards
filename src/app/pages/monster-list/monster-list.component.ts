@@ -1,41 +1,38 @@
-import { Component, computed, inject, model, signal } from '@angular/core';
-import { MonsterService } from '../../services/monster/monster.service';
+import { Component, computed, effect, inject, model, signal } from '@angular/core';
+import { PlayingCardComponent } from '../../components/playing-card/playing-card.component';
 import { Monster } from '../../models/monster.model';
-import { SearchBarComponent } from "../../components/search-bar/search-bar.component";
-import { PlayingCardComponent } from "../../components/playing-card/playing-card.component";
+import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
+import { CommonModule } from '@angular/common';
+import { MonsterService } from '../../services/monster/monster.service';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'app-monster-list',
-  standalone: true,
-  imports: [SearchBarComponent, PlayingCardComponent],
-  templateUrl: 'monster-list.component.html',
-  styleUrl: 'monster-list.component.css'
+	selector: 'app-monster-list',
+	standalone: true,
+	imports: [CommonModule, PlayingCardComponent, SearchBarComponent, MatButtonModule],
+	templateUrl: './monster-list.component.html',
+	styleUrl: './monster-list.component.css'
 })
 export class MonsterListComponent {
 
-  private monsterService = inject(MonsterService);
-  private router = inject(Router)
+	private monsterService = inject(MonsterService);
+	private router = inject(Router);
 
-  monsters = signal<Monster[]>([]);
-  search = model('');
+	monsters = toSignal(this.monsterService.getAll());
+	search = model('');
 
-  filteredMonsters = computed(() => {
-    return this.monsters().filter(monster => monster.name.includes(this.search()));
-  })
+	filteredMonsters = computed(() => {
+		return this.monsters()?.filter(monster => monster.name.includes(this.search())) ?? [];
+	});
 
-  constructor() {
-    this.monsters.set(this.monsterService.getAll());
-  }
+	addMonster() {
+		this.router.navigate(['monster']);
+	}
 
-  addMonster() {
-    const genericMonster = new Monster();
-    this.monsterService.add(genericMonster);
-    this.monsters.set(this.monsterService.getAll());
-  }
-
-  openMonster(monster: Monster) {
-    this.router.navigate(['monster', monster.id])
-  }
+	openMonster(monster: Monster) {
+		this.router.navigate(['monster', monster.id]);
+	}
 
 }

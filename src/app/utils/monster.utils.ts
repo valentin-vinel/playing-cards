@@ -1,8 +1,8 @@
 export enum MonsterType {
-	PLANT = 'plant',
-	ELECTRIC = 'electric',
-	FIRE = 'fire',
-	WATER = 'water',
+	PLANT = 'Plante',
+	ELECTRIC = 'Électrik',
+	FIRE = 'Feu',
+	WATER = 'Eau',
 }
 
 export interface IMonsterProperties {
